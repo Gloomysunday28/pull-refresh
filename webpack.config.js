@@ -8,8 +8,8 @@ module.exports = (env, arg) => {
     entry: './src/index.js',
     devtool: env === 'development' ? 'cheap-module-eval-source-map' : false,
     output: {
-      path: path.resolve(__dirname, './dist/'),
-      filename: 'pullRefresh.js',
+      path: path.resolve(__dirname, './lib/'),
+      filename: 'index.js',
       library: 'PullRefresh',
       libraryTarget: 'umd',
       libraryExport: 'default'

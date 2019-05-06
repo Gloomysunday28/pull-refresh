@@ -40,7 +40,7 @@ class PullRefresh {
 
     const fragement = document.createDocumentFragment() // 创建文档碎片, 防止过多操作DOM带来性能问题
 
-    const map = Array.from(this.el.children)
+    const map = Array.from(this.el.childNodes) // 所有节点包括文本节点
     map.map(el => {
       fragement.appendChild(el) // 添加所有子节点
     })
@@ -70,13 +70,7 @@ class PullRefresh {
     })
 
     this.el.addEventListener('touchend', e => {
-      if (typeof this.pullDown === 'function') {
-        this.pullDown()
-      } else {
-        setTimeout(_ => {
-          this.container.style.transform = `translate3d(0, -${this.initY}px, 0)`
-        }, 500)
-      }
+      this.eventPullDown()
     })
   }
   finishLoad() { // 完成加载
@@ -84,8 +78,15 @@ class PullRefresh {
   }
   initLoad() { // 初始化加载
     this.container.style.transform = `translate3d(0, 0, 0)`
+    this.eventPullDown()
+  }
+  eventPullDown() {
     if (typeof this.pullDown === 'function') {
       this.pullDown()
+    } else {
+      setTimeout(_ => {
+        this.container.style.transform = `translate3d(0, -${this.initY}px, 0)`
+      }, 500)
     }
   }
 }

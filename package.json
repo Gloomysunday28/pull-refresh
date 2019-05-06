@@ -1,14 +1,14 @@
 {
-  "name": "pull-refresh",
-  "version": "0.1.0",
+  "name": "martin-prefresh",
+  "version": "0.0.2",
   "description": "martin's pull-refresh",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --env development --color --progress --open",
     "build": "webpack --env production"
   },
-  "keywords": [],
+  "keywords": ["js", "pull-refresh"],
   "author": "martin<459953103@qq.com>",
   "license": "ISC",
   "devDependencies": {
