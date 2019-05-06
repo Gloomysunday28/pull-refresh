@@ -10,19 +10,41 @@
       margin: 0;
       padding: 0;
     }
-    html, body {
+    html, body, #root {
+      height: 100vh;
       overflow-x: hidden;
+    }
+    #root {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #pull-refresh {
+      width: 100%;
+      height: 300px;
+    }
+    .ccc {
+      width: 100%;
+      background: red;
+      height: 100px;
     }
   </style>
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <div class="ccc"></div>
+    <div id="pull-refresh">
+      <div>1231</div>
+      <div>1231</div>
+    </div>
+  </div>
   <% for(let js of htmlWebpackPlugin.options.js) {%>
   <script src="<%= js %>"></script>
   <%}%>
   <script>
     const pull = new PullRefresh({
-      el: 'root',
+      el: 'pull-refresh',
       pullDown() {
         setTimeout(_ => {
           console.log(1)
