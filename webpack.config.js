@@ -24,6 +24,9 @@ module.exports = (env, arg) => ({
       test: /\.js$/,
       exclude: /node_mudules/,
       loader: 'babel-loader'
+    }, {
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader']
     }]
   },
   plugins: [
