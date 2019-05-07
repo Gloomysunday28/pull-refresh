@@ -40,8 +40,8 @@ module.exports = (env, arg) => {
     webpackConfig.plugins.push(new HtmlWebpackPlugin({
       title: '下拉加载',
       template: './index.ejs',
-      filename: path.resolve(__dirname, './dist/index.html'),
-      js: ['pullRefresh.js'],
+      filename: path.resolve(__dirname, './lib/index.html'),
+      js: ['index.js'],
       inject: false,
     }))
   }

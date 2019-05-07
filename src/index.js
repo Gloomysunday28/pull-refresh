@@ -2,7 +2,11 @@ import './index.css'
 
 class PullRefresh {
   constructor(opt) {
-    const { el, pullDown, initLoad } = opt
+    const {
+      el,
+      pullDown,
+      initLoad
+    } = opt
 
     if (typeof el === 'string') {
       this.el = document.getElementById(el)
@@ -19,21 +23,22 @@ class PullRefresh {
   initPullContain() {
     this.container = document.createElement('div')
     this.container.classList.add('m-pull__refresh')
-    
+
     this.container.style.transform = `translate3d(0, -${this.initY}px, 0)`
+    this.container.style.height = `calc(100% + ${this.initY}px)`
     this.el.classList.add('m-pull__contain')
     this.initPullIcon()
   }
   /**
    *  @description 创建下拉加载图标,并且将容器的所有子节点移到新添加的容器中, 这是为了适应应用代码里容易的高度设置
    */
-  initPullIcon() {    
+  initPullIcon() {
     this.pullDownContain = document.createElement('div')
     this.pullDownContain.classList.add('c-pull__icon')
     this.pullDownContain.style.height = `${this.initY}px`
 
     this.pullIcon = document.createElement('div')
-    this.pullIcon .classList.add('pull-down__icon')
+    this.pullIcon.classList.add('pull-down__icon')
     this.pullDownContain.appendChild(this.pullIcon)
 
     this.container.prepend(this.pullDownContain) // 添加下拉Loading
@@ -47,30 +52,35 @@ class PullRefresh {
 
     this.container.appendChild(fragement)
     this.el.appendChild(this.container) // 将新的容器放入到初始化设置的容器中
+    this.scrollY = this.container.getBoundingClientRect().top
 
     this.initPullEvent()
   }
   initPullEvent() { // 初始化下拉loading事件
-    this.el.addEventListener('touchstart', e => {
-      const startY = e.touches[0].pageY
-      this.el.addEventListener('touchmove', e => {
-        const scrollTop = window.scrollY // 判断是否滑到顶部
-        const scrollY = e.touches[0].pageY
-        if (scrollTop <= 0) {
-          this.container.style.transform = `translate3d(0, -${this.initY - scrollY}px, 0)` // 根据滑动的距离来划出loading下拉距离
-          if (this.initY - scrollY + startY < 0) { // 如果超过了则设置为0
-            this.container.style.transform = `translate3d(0, 0, 0)`
-          }
-        }
-      }, {
-        passive: true // 提前通知浏览器执行默认事件
-      })
-    }, {
+    this.el.addEventListener('touchstart', this.startTouch.bind(this), {
       passive: false
     })
 
     this.el.addEventListener('touchend', e => {
       this.eventPullDown()
+      this.el.removeEventListener('touchstart', this.startTouch)
+      this.el.removeEventListener('touchmove', this.moveTouch)
+    })
+  }
+  moveTouch(e) {
+    const scrollTop = this.container.getBoundingClientRect().top // 判断是否滑到顶部
+    const scrollY = e.touches[0].pageY
+    if (scrollTop <= this.scrollY && scrollY > this.startY) {
+      this.container.style.transform = `translate3d(0, -${this.initY - scrollY}px, 0)` // 根据滑动的距离来划出loading下拉距离
+      if (this.initY - scrollY + this.startY < 0) { // 如果超过了则设置为0
+        this.container.style.transform = `translate3d(0, 0, 0)`
+      }
+    }
+  }
+  startTouch(e) {
+    this.startY = e.touches[0].pageY
+    this.el.addEventListener('touchmove', this.moveTouch.bind(this), {
+      passive: true
     })
   }
   finishLoad() { // 完成加载
