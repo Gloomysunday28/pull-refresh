@@ -5,11 +5,15 @@ const webpack = require('webpack')
 module.exports = (env, arg) => {
   const webpackConfig = {
     mode: env,
-    entry: './src/index.js',
+    entry: {
+      app: './src/index.js',
+      m: './src/src.js'
+    },
     devtool: env === 'development' ? 'cheap-module-eval-source-map' : false,
     output: {
       path: path.resolve(__dirname, './lib/'),
-      filename: 'index.js',
+      filename: '[name].js',
+      // chunkFilename: '[name].[chunkhash].js', // 代码切割后创建的文件 () => import()
       library: 'PullRefresh',
       libraryTarget: 'umd',
       libraryExport: 'default'
@@ -32,16 +36,17 @@ module.exports = (env, arg) => {
 
   if (env === 'development') {
     webpackConfig.devServer = {
+      contentBase: path.join(__dirname, 'public'),
       inline: true,
-      port: 3000,
-      host: '192.168.1.169',
+      port: 3001,
+      host: 'localhost',
       hot: true
     }
     webpackConfig.plugins.push(new HtmlWebpackPlugin({
       title: '下拉加载',
-      template: './index.ejs',
+      template: './public/index.ejs',
       filename: path.resolve(__dirname, './lib/index.html'),
-      js: ['index.js'],
+      js: ['app.js'],
       inject: false,
     }))
   }
